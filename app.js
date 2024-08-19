@@ -11,6 +11,15 @@ document.getElementById('startButton').addEventListener('click', function() {
     let attempts = 0;
     const maxAttempts = 200;
 
+    // Fisher-Yatesシャッフルアルゴリズム
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
     function runGacha() {
         attempts++;
         if (attempts > maxAttempts) {
@@ -18,10 +27,10 @@ document.getElementById('startButton').addEventListener('click', function() {
             return;
         }
 
-        // 00から99の範囲で重複しない2つのランダムな数字を生成
-        let numList = Array.from({ length: 100 }, (_, i) => i.toString().padStart(2, '0'));
-        let A = numList.splice(Math.floor(Math.random() * numList.length), 1)[0];
-        let B = numList.splice(Math.floor(Math.random() * numList.length), 1)[0];
+        // 00から99の範囲でシャッフルしたリストを生成
+        let numList = shuffle(Array.from({ length: 100 }, (_, i) => i.toString().padStart(2, '0')));
+        let A = numList.splice(0, 1)[0];
+        let B = numList.splice(0, 1)[0];
 
         // 3つ目のランダムな数字を生成
         let thirdNum = Math.floor(Math.random() * 100).toString().padStart(2, '0');
@@ -59,7 +68,7 @@ document.getElementById('startButton').addEventListener('click', function() {
     runGacha();
 });
 
-// 初回の履歴表示用の要素を追加
+// 履歴表示用の要素
 document.body.insertAdjacentHTML('beforeend', '<div id="history"><h3>実行履歴</h3></div>');
 // パターン②
 // 除外したい数字を入力させる
