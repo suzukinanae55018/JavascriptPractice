@@ -20,6 +20,12 @@ document.getElementById('startButton').addEventListener('click', function() {
         return array;
     }
 
+    function getRandomNumbers(count, max) {
+        let numbers = Array.from({ length: max }, (_, i) => i.toString().padStart(2, '0'));
+        numbers = shuffle(numbers);
+        return numbers.slice(0, count);
+    }
+
     function runGacha() {
         attempts++;
         if (attempts > maxAttempts) {
@@ -32,8 +38,12 @@ document.getElementById('startButton').addEventListener('click', function() {
         let A = numList.splice(0, 1)[0];
         let B = numList.splice(0, 1)[0];
 
-        // 3つ目のランダムな数字を生成
+        // 重複しない10個の数字を生成
+        let tenNumbers = getRandomNumbers(10, 100);
+
+        // あたりを決めるランダムな数字を生成
         let thirdNum = Math.floor(Math.random() * 100).toString().padStart(2, '0');
+
 
         // 判定結果
         let result;
@@ -41,12 +51,14 @@ document.getElementById('startButton').addEventListener('click', function() {
             result = `<span class="red">Aが当たりました (${A})</span>`;
         } else if (thirdNum === B) {
             result = `<span class="blue">Bが当たりました (${B})</span>`;
+        } else if (tenNumbers.includes(thirdNum)) {
+            result = `<span class="yellow">Cが当たりました (${thirdNum})</span>`;
         } else {
             result = `はずれ (${thirdNum})`;
         }
 
         // 結果と各数字の表示
-        let evaluation = `A: ${A}, B: ${B}, thirdNum: ${thirdNum}`;
+        let evaluation = `A: ${A}, B: ${B}, thirdNum: ${thirdNum}, 10個の数字: ${tenNumbers.join(', ')}`;
         let history = document.getElementById('history');
 
         // 実行履歴を表示するための新しい要素を作成
@@ -55,12 +67,12 @@ document.getElementById('startButton').addEventListener('click', function() {
         newEntry.innerHTML = `試行回数 ${attempts}回目: ${result}<br>${evaluation}`;
         history.appendChild(newEntry);
 
-        // AまたはBが当たったら停止
+        // AまたはBが当たった場合は停止し、Cが当たった場合は続行する
         if (thirdNum === A || thirdNum === B) {
             return;
         }
 
-        // AまたはBが当たっていない場合、次のガチャを実行
+        // Cが当たっていない場合、次のガチャを実行
         setTimeout(runGacha, 100); // 100msの間隔で実行
     }
 
@@ -70,6 +82,7 @@ document.getElementById('startButton').addEventListener('click', function() {
 
 // 履歴表示用の要素
 document.body.insertAdjacentHTML('beforeend', '<div id="history"><h3>実行履歴</h3></div>');
+
 // パターン②
 // 除外したい数字を入力させる
 
