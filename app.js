@@ -11,10 +11,19 @@ document.getElementById('startButton').addEventListener('click', function() {
     let attempts = 0;
     const maxAttempts = 200;
 
-    // Fisher-Yatesシャッフルアルゴリズム
-    function shuffle(array) {
+    // 乱数生成のためのseedをランダムに設定
+    const seed = Math.floor(Math.random() * 1000000);
+
+    // 乱数生成関数 (seedを使ったランダム生成)
+    function seededRandom(seed) {
+        const x = Math.sin(seed) * 10000;
+        return x - Math.floor(x);
+    }
+
+    // Fisher-Yatesシャッフルアルゴリズム (seededRandomを使用)
+    function shuffle(array, seed) {
         for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
+            const j = Math.floor(seededRandom(seed + i) * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
         return array;
@@ -22,7 +31,7 @@ document.getElementById('startButton').addEventListener('click', function() {
 
     function getRandomNumbers(count, max) {
         let numbers = Array.from({ length: max }, (_, i) => i.toString().padStart(2, '0'));
-        numbers = shuffle(numbers);
+        numbers = shuffle(numbers, seed);
         return numbers.slice(0, count);
     }
 
@@ -33,19 +42,14 @@ document.getElementById('startButton').addEventListener('click', function() {
             return;
         }
 
-        // 00から99の範囲でシャッフルしたリストを生成
-        let numList = shuffle(Array.from({ length: 100 }, (_, i) => i.toString().padStart(2, '0')));
+        let numList = shuffle(Array.from({ length: 100 }, (_, i) => i.toString().padStart(2, '0')), seed);
         let A = numList.splice(0, 1)[0];
         let B = numList.splice(0, 1)[0];
 
-        // 重複しない10個の数字を生成
         let tenNumbers = getRandomNumbers(10, 100);
 
-        // あたりを決めるランダムな数字を生成
         let thirdNum = Math.floor(Math.random() * 100).toString().padStart(2, '0');
 
-
-        // 判定結果
         let result;
         if (thirdNum === A) {
             result = `<span class="red">Aが当たりました (${A})</span>`;
@@ -57,30 +61,24 @@ document.getElementById('startButton').addEventListener('click', function() {
             result = `はずれ (${thirdNum})`;
         }
 
-        // 結果と各数字の表示
         let evaluation = `A: ${A}, B: ${B}, thirdNum: ${thirdNum}, 10個の数字: ${tenNumbers.join(', ')}`;
         let history = document.getElementById('history');
 
-        // 実行履歴を表示するための新しい要素を作成
         let newEntry = document.createElement('div');
         newEntry.className = 'history-entry';
         newEntry.innerHTML = `試行回数 ${attempts}回目: ${result}<br>${evaluation}`;
         history.appendChild(newEntry);
 
-        // AまたはBが当たった場合は停止し、Cが当たった場合は続行する
         if (thirdNum === A || thirdNum === B) {
             return;
         }
 
-        // Cが当たっていない場合、次のガチャを実行
-        setTimeout(runGacha, 100); // 100msの間隔で実行
+        setTimeout(runGacha, 100);
     }
 
-    // ガチャを開始
     runGacha();
 });
 
-// 履歴表示用の要素
 document.body.insertAdjacentHTML('beforeend', '<div id="history"><h3>実行履歴</h3></div>');
 
 // パターン②
