@@ -41,13 +41,15 @@ document.getElementById('startButton').addEventListener('click', function() {
             alert('最大試行回数に達しました。');
             return;
         }
-
+        // 00から99の範囲でシャッフルしたリストを生成
         let numList = shuffle(Array.from({ length: 100 }, (_, i) => i.toString().padStart(2, '0')), seed);
         let A = numList.splice(0, 1)[0];
         let B = numList.splice(0, 1)[0];
 
+        // 重複しない10個の数字を生成(低レア用)
         let tenNumbers = getRandomNumbers(10, 100);
 
+        // ユーザーが引いた当たりを決めるランダムな数字を生成
         let thirdNum = Math.floor(Math.random() * 100).toString().padStart(2, '0');
 
         let result;
@@ -60,19 +62,21 @@ document.getElementById('startButton').addEventListener('click', function() {
         } else {
             result = `はずれ (${thirdNum})`;
         }
-
+        // 結果と各数字の表示
         let evaluation = `A: ${A}, B: ${B}, thirdNum: ${thirdNum}, 10個の数字: ${tenNumbers.join(', ')}`;
         let history = document.getElementById('history');
 
+        // 実行履歴を表示する
         let newEntry = document.createElement('div');
         newEntry.className = 'history-entry';
         newEntry.innerHTML = `試行回数 ${attempts}回目: ${result}<br>${evaluation}`;
         history.appendChild(newEntry);
 
+        // AまたはBが当たった場合は停止し、Cが当たった場合は続行する
         if (thirdNum === A || thirdNum === B) {
             return;
         }
-
+        // 100msの間隔で実行
         setTimeout(runGacha, 100);
     }
 
