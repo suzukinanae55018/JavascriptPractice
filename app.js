@@ -11,6 +11,15 @@ document.getElementById('startButton').addEventListener('click', function() {
     let attempts = 0;
     const maxAttempts = 200;
 
+    // ボタンが押されたときにアニメーションを追加
+    const startButton = document.getElementById('startButton');
+    startButton.classList.add('clicked');
+
+    // クリック後に0.2秒後に元の状態に戻す
+    setTimeout(() => {
+        startButton.classList.remove('clicked');
+    }, 200);
+
     // 乱数生成関数 (seedを使ったランダム生成)
     function seededRandom(seed) {
         const x = Math.sin(seed) * 10000;

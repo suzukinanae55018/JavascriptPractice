@@ -52,3 +52,17 @@ button:hover {
   color: #ffa500;
   font-weight: bold;
 }
+
+/* ボタンの基本スタイル */
+#startButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+/* クリック時のアニメーション */
+#startButton:active {
+    transform: scale(0.95);
+    background-color: #ffcccc; /* クリック時に色が変わる */
+}
