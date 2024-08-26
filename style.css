@@ -66,3 +66,22 @@ button:hover {
     transform: scale(0.95);
     background-color: #ffcccc; /* クリック時に色が変わる */
 }
+
+/* シーソーアニメーションの定義 */
+@keyframes seesaw {
+  0% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+  100% {
+    transform: rotate(-5deg);
+  }
+}
+
+/* シーソーアニメーションを適用するクラス */
+.seesaw {
+  display: inline-block;
+  animation: seesaw 0.5s ease-in-out 1;
+}
