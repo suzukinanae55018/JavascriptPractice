@@ -59,7 +59,7 @@ button:hover {
     font-size: 16px;
     cursor: pointer;
     transition: transform 0.2s, background-color 0.2s;
-    box-shadow: 0px 4px 6px rgba(0, 0, 255, 0.5); /* 青色のドロップシャドウ */
+    box-shadow: 0px 4px 6px rgba(0, 0, 255, 0.6); /* 青色のドロップシャドウ */
 }
 
 /* クリック時のアニメーション */
